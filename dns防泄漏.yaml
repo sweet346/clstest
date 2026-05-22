@@ -161,7 +161,7 @@ rules:
   - RULE-SET,ai,💬 Ai平台
   - RULE-SET,youtube_domain,📹 油管视频
   - RULE-SET,onedrive_domain,Ⓜ️ 微软云盘
-  - RULE-SET,microsoft_class,Ⓜ️ 微软服务
+  - RULE-SET,microsoft_domain,Ⓜ️ 微软服务
   - RULE-SET,bing_domain,Ⓜ️ 微软Bing
   - RULE-SET,apple_domain,🍎 苹果服务
   - RULE-SET,twitter_domain,🕊️ 推特内容
@@ -201,7 +201,7 @@ rule-providers:
   telegram_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.mrs"}
   netflix_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/netflix.mrs"}
   onedrive_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/onedrive.mrs"}
-  microsoft_class: { <<: *class, url: "https://raw.githubusercontent.com/sweet346/clstest/refs/heads/main/microsoft.list"}
+  microsoft_domain: { <<: *domain, url: "https://raw.githubusercontent.com/sweet346/clstest/refs/heads/main/microsoft.mrs"}
   bing_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/bing.mrs"}  
   apple_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple.mrs"}
   speedtest_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/ookla-speedtest.mrs"}
