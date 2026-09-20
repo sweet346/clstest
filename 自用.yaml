@@ -1274,7 +1274,7 @@ rule-providers:
     behavior: classical
     interval: 28800
     type: http
-    url: "https://raw.githubusercontent.com/sweet346/clstest/refs/heads/main/Snowmoon.list"
+    url: "https://raw.githubusercontent.com/sweet346/OpenClash_repository/refs/heads/main/Snowmoon.list"
     format: text
   LocationDKS:
     behavior: domain
@@ -1286,5 +1286,5 @@ rule-providers:
     behavior: ipcidr
     interval: 28800
     type: http
-    url: "https://raw.githubusercontent.com/sweet346/clstest/refs/heads/main/SRP_Asia_Server.list"
+    url: "https://raw.githubusercontent.com/sweet346/OpenClash_repository/refs/heads/main/SRP_Asia_Server.list"
     format: text
