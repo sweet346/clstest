@@ -1,0 +1,1290 @@
+proxy-providers:
+  魔戒:
+    type: http
+    url: ""  # 填入订阅链接
+    interval: 3600  # 订阅更新间隔，单位：秒
+    proxy: DIRECT  # 下载订阅时使用的策略
+    # 在 Provider 层统一排除公告、流量、到期等非节点条目，避免各策略组重复配置
+    filter: "^(?!.*(DIRECT|直接连接|群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|使用|提示|特别|访问|支持|教程|关注|更新|作者|加入|USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author|Traffic|GB|Expire)).*$"
+    header:  # 可选：自定义 HTTP 请求头
+    health-check:
+      enable: true
+      url: https://cp.cloudflare.com/generate_204
+      interval: 300
+      timeout: 5000
+      lazy: false
+      expected-status: 204
+    override:
+      udp: true
+      # 不建议默认跳过 TLS 证书校验；仅在明确需要兼容特定节点时启用
+      skip-cert-verify: true
+      # additional-prefix: "[provider1]"
+      # additional-suffix: "test"
+  牛逼:
+    type: http
+    url: ""  # 填入订阅链接
+    interval: 3600  # 订阅更新间隔，单位：秒
+    proxy: DIRECT  # 下载订阅时使用的策略
+    # 在 Provider 层统一排除公告、流量、到期等非节点条目，避免各策略组重复配置
+    filter: "^(?!.*(DIRECT|如果只|太旧|重新复制|直接连接|群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|使用|提示|特别|访问|支持|教程|关注|更新|作者|加入|USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author|Traffic|GB|Expire)).*$"
+    header:  # 可选：自定义 HTTP 请求头
+    health-check:
+      enable: true
+      url: https://cp.cloudflare.com/generate_204
+      interval: 300
+      timeout: 5000
+      lazy: false
+      expected-status: 204
+    override:
+      udp: true
+      # 不建议默认跳过 TLS 证书校验；仅在明确需要兼容特定节点时启用
+      skip-cert-verify: true
+      # additional-prefix: "[provider1]"
+      # additional-suffix: "test"
+  守候:
+    type: http
+    url: ""  # 填入订阅链接
+    interval: 3600  # 订阅更新间隔，单位：秒
+    proxy: DIRECT  # 下载订阅时使用的策略
+    # 在 Provider 层统一排除公告、流量、到期等非节点条目，避免各策略组重复配置
+    filter: "^(?!.*(DIRECT|直接连接|群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|使用|提示|特别|访问|支持|教程|关注|更新|作者|加入|USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author|Traffic|GB|Expire)).*$"
+    header:  # 可选：自定义 HTTP 请求头
+    health-check:
+      enable: true
+      url: https://cp.cloudflare.com/generate_204
+      interval: 300
+      timeout: 5000
+      lazy: false
+      expected-status: 204
+    override:
+      udp: true
+      # 不建议默认跳过 TLS 证书校验；仅在明确需要兼容特定节点时启用
+      skip-cert-verify: true
+      # additional-prefix: "[provider2]"
+      # additional-suffix: "test"
+
+# ==================== 代理策略组 Proxy Groups ====================
+# 策略组候选顺序、分组类型与当前 Custom_Clash_Full.ini 保持一致；公共节点过滤在 provider1 层统一完成。
+proxy-groups:
+  - name: "♻️ 自动选择"
+    type: url-test
+    use:
+     - 守候
+     - 魔戒
+     - 牛逼
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+  - name: "🚀 手动选择"
+    type: select
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+  - name: "🕊️ 推特"
+    type: select
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    proxies:
+      - "🎯 全球直连"
+      - "🚀 手动选择"
+      - "♻️ 香港自动"
+      - "♻️ 日本自动"
+      - "♻️ 狮城自动"
+      - "♻️ 美国自动"
+      - "♻️ 台湾自动"
+      - "♻️ 韩国自动"
+      - "♻️ 自动选择"
+      - "🇭🇰 香港手选"
+      - "🇯🇵 日本手选"
+      - "🇺🇸 美国手选"
+      - "🇹🇼 台湾手选"
+      - "🇸🇬 狮城手选"
+      - "🇨🇦 加拿大手选"
+      - "🇬🇧 英国手选"
+      - "🇰🇷 韩国手选"
+      - "🇩🇪 德国手选"
+      - "🇻🇳 越南手选"
+      - "🇻🇳 越南手选"
+      - "🇦🇪 阿联酋手选"
+      - "🇲🇾 马来西亚手选"
+      - "🇹🇷 土耳其手选"
+      - "🇳🇬 尼日利亚手选"
+      - "🇺🇦 乌克兰手选"
+      - "🇵🇰 巴基斯坦手选"
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+  - name: "📲 电报消息"
+    type: select
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    proxies:
+      - "🎯 全球直连"
+      - "🚀 手动选择"
+      - "♻️ 香港自动"
+      - "♻️ 日本自动"
+      - "♻️ 狮城自动"
+      - "♻️ 美国自动"
+      - "♻️ 台湾自动"
+      - "♻️ 韩国自动"
+      - "♻️ 自动选择"
+      - "🇭🇰 香港手选"
+      - "🇯🇵 日本手选"
+      - "🇺🇸 美国手选"
+      - "🇹🇼 台湾手选"
+      - "🇸🇬 狮城手选"
+      - "🇨🇦 加拿大手选"
+      - "🇬🇧 英国手选"
+      - "🇰🇷 韩国手选"
+      - "🇩🇪 德国手选"
+      - "🇻🇳 越南手选"
+      - "🇻🇳 越南手选"
+      - "🇦🇪 阿联酋手选"
+      - "🇲🇾 马来西亚手选"
+      - "🇹🇷 土耳其手选"
+      - "🇳🇬 尼日利亚手选"
+      - "🇺🇦 乌克兰手选"
+      - "🇵🇰 巴基斯坦手选"
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+  - name: "📹 YouTube"
+    type: select
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    proxies:
+      - "🎯 全球直连"
+      - "🚀 手动选择"
+      - "♻️ 香港自动"
+      - "♻️ 日本自动"
+      - "♻️ 狮城自动"
+      - "♻️ 美国自动"
+      - "♻️ 台湾自动"
+      - "♻️ 韩国自动"
+      - "♻️ 自动选择"
+      - "🇭🇰 香港手选"
+      - "🇯🇵 日本手选"
+      - "🇺🇸 美国手选"
+      - "🇹🇼 台湾手选"
+      - "🇸🇬 狮城手选"
+      - "🇨🇦 加拿大手选"
+      - "🇬🇧 英国手选"
+      - "🇰🇷 韩国手选"
+      - "🇩🇪 德国手选"
+      - "🇻🇳 越南手选"
+      - "🇻🇳 越南手选"
+      - "🇦🇪 阿联酋手选"
+      - "🇲🇾 马来西亚手选"
+      - "🇹🇷 土耳其手选"
+      - "🇳🇬 尼日利亚手选"
+      - "🇺🇦 乌克兰手选"
+      - "🇵🇰 巴基斯坦手选"
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+  - name: "🐈‍⬛ Github"
+    type: select
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    proxies:
+      - "🎯 全球直连"
+      - "🚀 手动选择"
+      - "♻️ 香港自动"
+      - "♻️ 日本自动"
+      - "♻️ 狮城自动"
+      - "♻️ 美国自动"
+      - "♻️ 台湾自动"
+      - "♻️ 韩国自动"
+      - "♻️ 自动选择"
+      - "🇭🇰 香港手选"
+      - "🇯🇵 日本手选"
+      - "🇺🇸 美国手选"
+      - "🇹🇼 台湾手选"
+      - "🇸🇬 狮城手选"
+      - "🇨🇦 加拿大手选"
+      - "🇬🇧 英国手选"
+      - "🇰🇷 韩国手选"
+      - "🇩🇪 德国手选"
+      - "🇻🇳 越南手选"
+      - "🇻🇳 越南手选"
+      - "🇦🇪 阿联酋手选"
+      - "🇲🇾 马来西亚手选"
+      - "🇹🇷 土耳其手选"
+      - "🇳🇬 尼日利亚手选"
+      - "🇺🇦 乌克兰手选"
+      - "🇵🇰 巴基斯坦手选"
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+  - name: "⚛️ ChatGPT"
+    type: select
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    proxies:
+      - "🎯 全球直连"
+      - "🚀 手动选择"
+      - "♻️ 香港自动"
+      - "♻️ 日本自动"
+      - "♻️ 狮城自动"
+      - "♻️ 美国自动"
+      - "♻️ 台湾自动"
+      - "♻️ 韩国自动"
+      - "♻️ 自动选择"
+      - "🇭🇰 香港手选"
+      - "🇯🇵 日本手选"
+      - "🇺🇸 美国手选"
+      - "🇹🇼 台湾手选"
+      - "🇸🇬 狮城手选"
+      - "🇨🇦 加拿大手选"
+      - "🇬🇧 英国手选"
+      - "🇰🇷 韩国手选"
+      - "🇩🇪 德国手选"
+      - "🇻🇳 越南手选"
+      - "🇻🇳 越南手选"
+      - "🇦🇪 阿联酋手选"
+      - "🇲🇾 马来西亚手选"
+      - "🇹🇷 土耳其手选"
+      - "🇳🇬 尼日利亚手选"
+      - "🇺🇦 乌克兰手选"
+      - "🇵🇰 巴基斯坦手选"
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+  - name: "💬 Ai平台"
+    type: select
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    proxies:
+      - "🎯 全球直连"
+      - "🚀 手动选择"
+      - "♻️ 香港自动"
+      - "♻️ 日本自动"
+      - "♻️ 狮城自动"
+      - "♻️ 美国自动"
+      - "♻️ 台湾自动"
+      - "♻️ 韩国自动"
+      - "♻️ 自动选择"
+      - "🇭🇰 香港手选"
+      - "🇯🇵 日本手选"
+      - "🇺🇸 美国手选"
+      - "🇹🇼 台湾手选"
+      - "🇸🇬 狮城手选"
+      - "🇨🇦 加拿大手选"
+      - "🇬🇧 英国手选"
+      - "🇰🇷 韩国手选"
+      - "🇩🇪 德国手选"
+      - "🇻🇳 越南手选"
+      - "🇻🇳 越南手选"
+      - "🇦🇪 阿联酋手选"
+      - "🇲🇾 马来西亚手选"
+      - "🇹🇷 土耳其手选"
+      - "🇳🇬 尼日利亚手选"
+      - "🇺🇦 乌克兰手选"
+      - "🇵🇰 巴基斯坦手选"
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+  - name: "☁️ Google服务"
+    type: select
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    proxies:
+      - "🎯 全球直连"
+      - "🚀 手动选择"
+      - "♻️ 香港自动"
+      - "♻️ 日本自动"
+      - "♻️ 狮城自动"
+      - "♻️ 美国自动"
+      - "♻️ 台湾自动"
+      - "♻️ 韩国自动"
+      - "♻️ 自动选择"
+      - "🇭🇰 香港手选"
+      - "🇯🇵 日本手选"
+      - "🇺🇸 美国手选"
+      - "🇹🇼 台湾手选"
+      - "🇸🇬 狮城手选"
+      - "🇨🇦 加拿大手选"
+      - "🇬🇧 英国手选"
+      - "🇰🇷 韩国手选"
+      - "🇩🇪 德国手选"
+      - "🇻🇳 越南手选"
+      - "🇻🇳 越南手选"
+      - "🇦🇪 阿联酋手选"
+      - "🇲🇾 马来西亚手选"
+      - "🇹🇷 土耳其手选"
+      - "🇳🇬 尼日利亚手选"
+      - "🇺🇦 乌克兰手选"
+      - "🇵🇰 巴基斯坦手选"
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+  - name: "💬 即时通讯"
+    type: select
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    proxies:
+      - "🎯 全球直连"
+      - "🚀 手动选择"
+      - "♻️ 香港自动"
+      - "♻️ 日本自动"
+      - "♻️ 狮城自动"
+      - "♻️ 美国自动"
+      - "♻️ 台湾自动"
+      - "♻️ 韩国自动"
+      - "♻️ 自动选择"
+      - "🇭🇰 香港手选"
+      - "🇯🇵 日本手选"
+      - "🇺🇸 美国手选"
+      - "🇹🇼 台湾手选"
+      - "🇸🇬 狮城手选"
+      - "🇨🇦 加拿大手选"
+      - "🇬🇧 英国手选"
+      - "🇰🇷 韩国手选"
+      - "🇩🇪 德国手选"
+      - "🇻🇳 越南手选"
+      - "🇻🇳 越南手选"
+      - "🇦🇪 阿联酋手选"
+      - "🇲🇾 马来西亚手选"
+      - "🇹🇷 土耳其手选"
+      - "🇳🇬 尼日利亚手选"
+      - "🇺🇦 乌克兰手选"
+      - "🇵🇰 巴基斯坦手选"
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+  - name: "🎮 亚服SRP"
+    type: select
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    proxies:
+      - "🎯 全球直连"
+      - "🚀 手动选择"
+      - "♻️ 香港自动"
+      - "♻️ 日本自动"
+      - "♻️ 狮城自动"
+      - "♻️ 美国自动"
+      - "♻️ 台湾自动"
+      - "♻️ 韩国自动"
+      - "♻️ 自动选择"
+      - "🇭🇰 香港手选"
+      - "🇯🇵 日本手选"
+      - "🇺🇸 美国手选"
+      - "🇹🇼 台湾手选"
+      - "🇸🇬 狮城手选"
+      - "🇨🇦 加拿大手选"
+      - "🇬🇧 英国手选"
+      - "🇰🇷 韩国手选"
+      - "🇩🇪 德国手选"
+      - "🇻🇳 越南手选"
+      - "🇻🇳 越南手选"
+      - "🇦🇪 阿联酋手选"
+      - "🇲🇾 马来西亚手选"
+      - "🇹🇷 土耳其手选"
+      - "🇳🇬 尼日利亚手选"
+      - "🇺🇦 乌克兰手选"
+      - "🇵🇰 巴基斯坦手选"
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+  - name: "🌎 国外媒体"
+    type: select
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    proxies:
+      - "🎯 全球直连"
+      - "🚀 手动选择"
+      - "♻️ 香港自动"
+      - "♻️ 日本自动"
+      - "♻️ 狮城自动"
+      - "♻️ 美国自动"
+      - "♻️ 台湾自动"
+      - "♻️ 韩国自动"
+      - "♻️ 自动选择"
+      - "🇭🇰 香港手选"
+      - "🇯🇵 日本手选"
+      - "🇺🇸 美国手选"
+      - "🇹🇼 台湾手选"
+      - "🇸🇬 狮城手选"
+      - "🇨🇦 加拿大手选"
+      - "🇬🇧 英国手选"
+      - "🇰🇷 韩国手选"
+      - "🇩🇪 德国手选"
+      - "🇻🇳 越南手选"
+      - "🇻🇳 越南手选"
+      - "🇦🇪 阿联酋手选"
+      - "🇲🇾 马来西亚手选"
+      - "🇹🇷 土耳其手选"
+      - "🇳🇬 尼日利亚手选"
+      - "🇺🇦 乌克兰手选"
+      - "🇵🇰 巴基斯坦手选"
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+  - name: "💾 OneDrive"
+    type: select
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    proxies:
+      - "🎯 全球直连"
+      - "🚀 手动选择"
+      - "♻️ 香港自动"
+      - "♻️ 日本自动"
+      - "♻️ 狮城自动"
+      - "♻️ 美国自动"
+      - "♻️ 台湾自动"
+      - "♻️ 韩国自动"
+      - "♻️ 自动选择"
+      - "🇭🇰 香港手选"
+      - "🇯🇵 日本手选"
+      - "🇺🇸 美国手选"
+      - "🇹🇼 台湾手选"
+      - "🇸🇬 狮城手选"
+      - "🇨🇦 加拿大手选"
+      - "🇬🇧 英国手选"
+      - "🇰🇷 韩国手选"
+      - "🇩🇪 德国手选"
+      - "🇻🇳 越南手选"
+      - "🇻🇳 越南手选"
+      - "🇦🇪 阿联酋手选"
+      - "🇲🇾 马来西亚手选"
+      - "🇹🇷 土耳其手选"
+      - "🇳🇬 尼日利亚手选"
+      - "🇺🇦 乌克兰手选"
+      - "🇵🇰 巴基斯坦手选"
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+  - name: "🎮 Steam"
+    type: select
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    proxies:
+      - "🎯 全球直连"
+      - "🚀 手动选择"
+      - "♻️ 香港自动"
+      - "♻️ 日本自动"
+      - "♻️ 狮城自动"
+      - "♻️ 美国自动"
+      - "♻️ 台湾自动"
+      - "♻️ 韩国自动"
+      - "♻️ 自动选择"
+      - "🇭🇰 香港手选"
+      - "🇯🇵 日本手选"
+      - "🇺🇸 美国手选"
+      - "🇹🇼 台湾手选"
+      - "🇸🇬 狮城手选"
+      - "🇨🇦 加拿大手选"
+      - "🇬🇧 英国手选"
+      - "🇰🇷 韩国手选"
+      - "🇩🇪 德国手选"
+      - "🇻🇳 越南手选"
+      - "🇻🇳 越南手选"
+      - "🇦🇪 阿联酋手选"
+      - "🇲🇾 马来西亚手选"
+      - "🇹🇷 土耳其手选"
+      - "🇳🇬 尼日利亚手选"
+      - "🇺🇦 乌克兰手选"
+      - "🇵🇰 巴基斯坦手选"
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+  - name: "🎮 Epic"
+    type: select
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    proxies:
+      - "🎯 全球直连"
+      - "🚀 手动选择"
+      - "♻️ 香港自动"
+      - "♻️ 日本自动"
+      - "♻️ 狮城自动"
+      - "♻️ 美国自动"
+      - "♻️ 台湾自动"
+      - "♻️ 韩国自动"
+      - "♻️ 自动选择"
+      - "🇭🇰 香港手选"
+      - "🇯🇵 日本手选"
+      - "🇺🇸 美国手选"
+      - "🇹🇼 台湾手选"
+      - "🇸🇬 狮城手选"
+      - "🇨🇦 加拿大手选"
+      - "🇬🇧 英国手选"
+      - "🇰🇷 韩国手选"
+      - "🇩🇪 德国手选"
+      - "🇻🇳 越南手选"
+      - "🇻🇳 越南手选"
+      - "🇦🇪 阿联酋手选"
+      - "🇲🇾 马来西亚手选"
+      - "🇹🇷 土耳其手选"
+      - "🇳🇬 尼日利亚手选"
+      - "🇺🇦 乌克兰手选"
+      - "🇵🇰 巴基斯坦手选"
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+  - name: "🎮 国内游戏"
+    type: select
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    proxies:
+      - "🎯 全球直连"
+      - "🚀 手动选择"
+      - "♻️ 香港自动"
+      - "♻️ 日本自动"
+      - "♻️ 狮城自动"
+      - "♻️ 美国自动"
+      - "♻️ 台湾自动"
+      - "♻️ 韩国自动"
+      - "♻️ 自动选择"
+      - "🇭🇰 香港手选"
+      - "🇯🇵 日本手选"
+      - "🇺🇸 美国手选"
+      - "🇹🇼 台湾手选"
+      - "🇸🇬 狮城手选"
+      - "🇨🇦 加拿大手选"
+      - "🇬🇧 英国手选"
+      - "🇰🇷 韩国手选"
+      - "🇩🇪 德国手选"
+      - "🇻🇳 越南手选"
+      - "🇻🇳 越南手选"
+      - "🇦🇪 阿联酋手选"
+      - "🇲🇾 马来西亚手选"
+      - "🇹🇷 土耳其手选"
+      - "🇳🇬 尼日利亚手选"
+      - "🇺🇦 乌克兰手选"
+      - "🇵🇰 巴基斯坦手选"
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+  - name: "🎮 国外游戏"
+    type: select
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    proxies:
+      - "🎯 全球直连"
+      - "🚀 手动选择"
+      - "♻️ 香港自动"
+      - "♻️ 日本自动"
+      - "♻️ 狮城自动"
+      - "♻️ 美国自动"
+      - "♻️ 台湾自动"
+      - "♻️ 韩国自动"
+      - "♻️ 自动选择"
+      - "🇭🇰 香港手选"
+      - "🇯🇵 日本手选"
+      - "🇺🇸 美国手选"
+      - "🇹🇼 台湾手选"
+      - "🇸🇬 狮城手选"
+      - "🇨🇦 加拿大手选"
+      - "🇬🇧 英国手选"
+      - "🇰🇷 韩国手选"
+      - "🇩🇪 德国手选"
+      - "🇻🇳 越南手选"
+      - "🇻🇳 越南手选"
+      - "🇦🇪 阿联酋手选"
+      - "🇲🇾 马来西亚手选"
+      - "🇹🇷 土耳其手选"
+      - "🇳🇬 尼日利亚手选"
+      - "🇺🇦 乌克兰手选"
+      - "🇵🇰 巴基斯坦手选"
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+  - name: "Ⓜ️ 微软服务"
+    type: select
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    proxies:
+      - "🎯 全球直连"
+      - "🚀 手动选择"
+      - "♻️ 香港自动"
+      - "♻️ 日本自动"
+      - "♻️ 狮城自动"
+      - "♻️ 美国自动"
+      - "♻️ 台湾自动"
+      - "♻️ 韩国自动"
+      - "♻️ 自动选择"
+      - "🇭🇰 香港手选"
+      - "🇯🇵 日本手选"
+      - "🇺🇸 美国手选"
+      - "🇹🇼 台湾手选"
+      - "🇸🇬 狮城手选"
+      - "🇨🇦 加拿大手选"
+      - "🇬🇧 英国手选"
+      - "🇰🇷 韩国手选"
+      - "🇩🇪 德国手选"
+      - "🇻🇳 越南手选"
+      - "🇻🇳 越南手选"
+      - "🇦🇪 阿联酋手选"
+      - "🇲🇾 马来西亚手选"
+      - "🇹🇷 土耳其手选"
+      - "🇳🇬 尼日利亚手选"
+      - "🇺🇦 乌克兰手选"
+      - "🇵🇰 巴基斯坦手选"
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+  - name: "🎵 抖快书定位"
+    type: select
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    proxies:
+      - "🎯 全球直连"
+      - "🚀 手动选择"
+      - "♻️ 香港自动"
+      - "♻️ 日本自动"
+      - "♻️ 狮城自动"
+      - "♻️ 美国自动"
+      - "♻️ 台湾自动"
+      - "♻️ 韩国自动"
+      - "♻️ 自动选择"
+      - "🇭🇰 香港手选"
+      - "🇯🇵 日本手选"
+      - "🇺🇸 美国手选"
+      - "🇹🇼 台湾手选"
+      - "🇸🇬 狮城手选"
+      - "🇨🇦 加拿大手选"
+      - "🇬🇧 英国手选"
+      - "🇰🇷 韩国手选"
+      - "🇩🇪 德国手选"
+      - "🇻🇳 越南手选"
+      - "🇻🇳 越南手选"
+      - "🇦🇪 阿联酋手选"
+      - "🇲🇾 马来西亚手选"
+      - "🇹🇷 土耳其手选"
+      - "🇳🇬 尼日利亚手选"
+      - "🇺🇦 乌克兰手选"
+      - "🇵🇰 巴基斯坦手选"
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+  - name: "🎵 TikTok"
+    type: select
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    proxies:
+      - "🎯 全球直连"
+      - "🚀 手动选择"
+      - "♻️ 香港自动"
+      - "♻️ 日本自动"
+      - "♻️ 狮城自动"
+      - "♻️ 美国自动"
+      - "♻️ 台湾自动"
+      - "♻️ 韩国自动"
+      - "♻️ 自动选择"
+      - "🇭🇰 香港手选"
+      - "🇯🇵 日本手选"
+      - "🇺🇸 美国手选"
+      - "🇹🇼 台湾手选"
+      - "🇸🇬 狮城手选"
+      - "🇨🇦 加拿大手选"
+      - "🇬🇧 英国手选"
+      - "🇰🇷 韩国手选"
+      - "🇩🇪 德国手选"
+      - "🇻🇳 越南手选"
+      - "🇻🇳 越南手选"
+      - "🇦🇪 阿联酋手选"
+      - "🇲🇾 马来西亚手选"
+      - "🇹🇷 土耳其手选"
+      - "🇳🇬 尼日利亚手选"
+      - "🇺🇦 乌克兰手选"
+      - "🇵🇰 巴基斯坦手选"
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+  - name: "🎮 雪月插件"
+    type: select
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    proxies:
+      - "🎯 全球直连"
+      - "🚀 手动选择"
+      - "♻️ 香港自动"
+      - "♻️ 日本自动"
+      - "♻️ 狮城自动"
+      - "♻️ 美国自动"
+      - "♻️ 台湾自动"
+      - "♻️ 韩国自动"
+      - "♻️ 自动选择"
+      - "🇭🇰 香港手选"
+      - "🇯🇵 日本手选"
+      - "🇺🇸 美国手选"
+      - "🇹🇼 台湾手选"
+      - "🇸🇬 狮城手选"
+      - "🇨🇦 加拿大手选"
+      - "🇬🇧 英国手选"
+      - "🇰🇷 韩国手选"
+      - "🇩🇪 德国手选"
+      - "🇻🇳 越南手选"
+      - "🇻🇳 越南手选"
+      - "🇦🇪 阿联酋手选"
+      - "🇲🇾 马来西亚手选"
+      - "🇹🇷 土耳其手选"
+      - "🇳🇬 尼日利亚手选"
+      - "🇺🇦 乌克兰手选"
+      - "🇵🇰 巴基斯坦手选"
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+  - name: "🎻 Spotify"
+    type: select
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    proxies:
+      - "🎯 全球直连"
+      - "🚀 手动选择"
+      - "♻️ 香港自动"
+      - "♻️ 日本自动"
+      - "♻️ 狮城自动"
+      - "♻️ 美国自动"
+      - "♻️ 台湾自动"
+      - "♻️ 韩国自动"
+      - "♻️ 自动选择"
+      - "🇭🇰 香港手选"
+      - "🇯🇵 日本手选"
+      - "🇺🇸 美国手选"
+      - "🇹🇼 台湾手选"
+      - "🇸🇬 狮城手选"
+      - "🇨🇦 加拿大手选"
+      - "🇬🇧 英国手选"
+      - "🇰🇷 韩国手选"
+      - "🇩🇪 德国手选"
+      - "🇻🇳 越南手选"
+      - "🇻🇳 越南手选"
+      - "🇦🇪 阿联酋手选"
+      - "🇲🇾 马来西亚手选"
+      - "🇹🇷 土耳其手选"
+      - "🇳🇬 尼日利亚手选"
+      - "🇺🇦 乌克兰手选"
+      - "🇵🇰 巴基斯坦手选"
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+  - name: "📺 巴哈姆特"
+    type: select
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    proxies:
+      - "🎯 全球直连"
+      - "🚀 手动选择"
+      - "♻️ 香港自动"
+      - "♻️ 日本自动"
+      - "♻️ 狮城自动"
+      - "♻️ 美国自动"
+      - "♻️ 台湾自动"
+      - "♻️ 韩国自动"
+      - "♻️ 自动选择"
+      - "🇭🇰 香港手选"
+      - "🇯🇵 日本手选"
+      - "🇺🇸 美国手选"
+      - "🇹🇼 台湾手选"
+      - "🇸🇬 狮城手选"
+      - "🇨🇦 加拿大手选"
+      - "🇬🇧 英国手选"
+      - "🇰🇷 韩国手选"
+      - "🇩🇪 德国手选"
+      - "🇻🇳 越南手选"
+      - "🇻🇳 越南手选"
+      - "🇦🇪 阿联酋手选"
+      - "🇲🇾 马来西亚手选"
+      - "🇹🇷 土耳其手选"
+      - "🇳🇬 尼日利亚手选"
+      - "🇺🇦 乌克兰手选"
+      - "🇵🇰 巴基斯坦手选"
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+  - name: "🍎 苹果服务"
+    type: select
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    proxies:
+      - "🎯 全球直连"
+      - "🚀 手动选择"
+      - "♻️ 香港自动"
+      - "♻️ 日本自动"
+      - "♻️ 狮城自动"
+      - "♻️ 美国自动"
+      - "♻️ 台湾自动"
+      - "♻️ 韩国自动"
+      - "♻️ 自动选择"
+      - "🇭🇰 香港手选"
+      - "🇯🇵 日本手选"
+      - "🇺🇸 美国手选"
+      - "🇹🇼 台湾手选"
+      - "🇸🇬 狮城手选"
+      - "🇨🇦 加拿大手选"
+      - "🇬🇧 英国手选"
+      - "🇰🇷 韩国手选"
+      - "🇩🇪 德国手选"
+      - "🇻🇳 越南手选"
+      - "🇻🇳 越南手选"
+      - "🇦🇪 阿联酋手选"
+      - "🇲🇾 马来西亚手选"
+      - "🇹🇷 土耳其手选"
+      - "🇳🇬 尼日利亚手选"
+      - "🇺🇦 乌克兰手选"
+      - "🇵🇰 巴基斯坦手选"
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+  - name: "🌍 国外域名"
+    type: select
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    proxies:
+      - "🎯 全球直连"
+      - "🚀 手动选择"
+      - "♻️ 香港自动"
+      - "♻️ 日本自动"
+      - "♻️ 狮城自动"
+      - "♻️ 美国自动"
+      - "♻️ 台湾自动"
+      - "♻️ 韩国自动"
+      - "♻️ 自动选择"
+      - "🇭🇰 香港手选"
+      - "🇯🇵 日本手选"
+      - "🇺🇸 美国手选"
+      - "🇹🇼 台湾手选"
+      - "🇸🇬 狮城手选"
+      - "🇨🇦 加拿大手选"
+      - "🇬🇧 英国手选"
+      - "🇰🇷 韩国手选"
+      - "🇩🇪 德国手选"
+      - "🇻🇳 越南手选"
+      - "🇻🇳 越南手选"
+      - "🇦🇪 阿联酋手选"
+      - "🇲🇾 马来西亚手选"
+      - "🇹🇷 土耳其手选"
+      - "🇳🇬 尼日利亚手选"
+      - "🇺🇦 乌克兰手选"
+      - "🇵🇰 巴基斯坦手选"
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+  - name: "🐟 漏网之鱼"
+    type: select
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    proxies:
+      - "🎯 全球直连"
+      - "🚀 手动选择"
+      - "♻️ 香港自动"
+      - "♻️ 日本自动"
+      - "♻️ 狮城自动"
+      - "♻️ 美国自动"
+      - "♻️ 台湾自动"
+      - "♻️ 韩国自动"
+      - "♻️ 自动选择"
+      - "🇭🇰 香港手选"
+      - "🇯🇵 日本手选"
+      - "🇺🇸 美国手选"
+      - "🇹🇼 台湾手选"
+      - "🇸🇬 狮城手选"
+      - "🇨🇦 加拿大手选"
+      - "🇬🇧 英国手选"
+      - "🇰🇷 韩国手选"
+      - "🇩🇪 德国手选"
+      - "🇻🇳 越南手选"
+      - "🇻🇳 越南手选"
+      - "🇦🇪 阿联酋手选"
+      - "🇲🇾 马来西亚手选"
+      - "🇹🇷 土耳其手选"
+      - "🇳🇬 尼日利亚手选"
+      - "🇺🇦 乌克兰手选"
+      - "🇵🇰 巴基斯坦手选"
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+  - name: "🔀 非标端口"
+    type: select
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    proxies:
+      - "🐟 漏网之鱼"
+      - "🎯 全球直连"
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+  - name: "🇭🇰 香港手选"
+    type: select
+    filter: '(?i)(🇭🇰|港|\bHK(?:[-_ ]?\d+(?:[-_ ]?[A-Za-z]{2,})?)?\b|hk|Hong Kong|HongKong|hongkong|HONG KONG|HONGKONG|深港|HKG|九龙|Kowloon|新界|沙田|荃湾|葵涌)'
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+  - name: "🇯🇵 日本手选"
+    type: select
+    filter: '(?i)(🇯🇵|\bJP(?:[-_ ]?\d+(?:[-_ ]?[A-Za-z]{2,})?)?\b|jp|Japan|日本|Nihon|Nippon|JPN|东京|Tokyo|大阪|Osaka|京都|Kyoto|名古屋|Nagoya|横滨|Yokohama|福冈|Fukuoka|札幌|Sapporo|神户|Kobe|冲绳|Okinawa)'
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+  - name: "🇺🇸 美国手选"
+    type: select
+    filter: '(?i)(🇺🇸|美|\bUS(?:[-_ ]?\d+(?:[-_ ]?[A-Za-z]{2,})?)?\b|us|USA|United States|UnitedStates|America|American|美国|米国|纽约|New York|洛杉矶|Los Angeles|旧金山|San Francisco|西雅图|Seattle|芝加哥|Chicago|拉斯维加斯|Las Vegas|华盛顿|Washington|迈阿密|Miami|波士顿|Boston)'
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+  - name: "🇹🇼 台湾手选"
+    type: select
+    filter: '(?i)(🇹🇼|台|\bTW(?:[-_ ]?\d+(?:[-_ ]?[A-Za-z]{2,})?)?\b|tw|TWN|Taiwan|Taiwanese|台湾|臺灣|台灣|台北|Taipei|高雄|Kaohsiung|台中|Taichung|新北|New Taipei|桃园|Taoyuan|新竹|Hsinchu)'
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+  - name: "🇸🇬 狮城手选"
+    type: select
+    filter: '(?i)(🇸🇬|新|\bSG(?:[-_ ]?\d+(?:[-_ ]?[A-Za-z]{2,})?)?\b|sg|SGP|Singapore|Singaporean|新加坡|狮城|獅城|星加坡|滨海|Marina Bay|裕廊|Jurong|乌节|Orchard|淡滨尼|Tampines|榜鹅|Punggol)'
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+  - name: "🇨🇦 加拿大手选"
+    type: select
+    filter: '(?i)(🇨🇦|加|\bCA(?:[-_ ]?\d+(?:[-_ ]?[A-Za-z]{2,})?)?\b|ca|CAN|Canada|Canadian|加拿大|多伦多|Toronto|温哥华|Vancouver|蒙特利尔|Montreal|渥太华|Ottawa|卡尔加里|Calgary|埃德蒙顿|Edmonton|魁北克|Quebec|温尼伯|Winnipeg)'
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+  - name: "🇬🇧 英国手选"
+    type: select
+    filter: '(?i)(🇬🇧|\bUK(?:[-_ ]?\d+(?:[-_ ]?[A-Za-z]{2,})?)?\b|United Kingdom|UnitedKingdom|Britain|英国|英|伦敦|London|曼彻斯特|Manchester|伯明翰|Birmingham|LON|MAN)'
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+  - name: "🇰🇷 韩国手选"
+    type: select
+    filter: '(?i)(🇰🇷|\bKR(?:[-_ ]?\d+(?:[-_ ]?[A-Za-z]{2,})?)?\b|Korea|KOREA|KOR|首尔|韩|韓|春川|Chuncheon|ICN)'
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+  - name: "🇩🇪 德国手选"
+    type: select
+    filter: '(?i)(🇩🇪|\bDE(?:[-_ ]?\d+(?:[-_ ]?[A-Za-z]{2,})?)?\b|Germany|Germany|German|Deutschland|德国|德|柏林|Berlin|慕尼黑|Munich|München|法兰克福|Frankfurt|汉堡|Hamburg|科隆|Cologne|BER|MUC|FRA)'
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+  - name: "🇻🇳 越南手选"
+    type: select
+    filter: '(?i)(🇻🇳|\bVN(?:[-_ ]?\d+(?:[-_ ]?[A-Za-z]{2,})?)?\b|Vietnam|VIETNAM|VNM|Việt Nam|越南|越|河内|Hanoi|胡志明市|Ho Chi Minh|HoChiMinh|西贡|Saigon|HAN|SGN)'
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+  - name: "🇦🇪 阿联酋手选"
+    type: select
+    filter: '(?i)(🇦🇪|\bAE(?:[-_ ]?\d+(?:[-_ ]?[A-Za-z]{2,})?)?\b|UAE|United Arab Emirates|UNITED ARAB EMIRATES|Emirates|阿联酋|阿拉伯联合酋长国|阿联|迪拜|Dubai|阿布扎比|Abu Dhabi|AbuDhabi|DXB|AUH)'
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+  - name: "🇲🇾 马来西亚手选"
+    type: select
+    filter: '(?i)(🇲🇾|\bMY(?:[-_ ]?\d+(?:[-_ ]?[A-Za-z]{2,})?)?\b|Malaysia|MALAYSIA|Malaysian|MYS|马来西亚|马来|吉隆坡|Kuala Lumpur|KualaLumpur|槟城|Penang|新山|Johor Bahru|JB|KUL|PEN)'
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+  - name: "🇹🇷 土耳其手选"
+    type: select
+    filter: '(?i)(🇹🇷|\bTR(?:[-_ ]?\d+(?:[-_ ]?[A-Za-z]{2,})?)?\b|Turkey|TURKEY|Turkish|Türkiye|TURKIYE|土耳其|土|伊斯坦布尔|Istanbul|安卡拉|Ankara|伊兹密尔|Izmir|IST|ANK)'
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+  - name: "🇳🇬 尼日利亚手选"
+    type: select
+    filter: '(?i)(🇳🇬|\bNG(?:[-_ ]?\d+(?:[-_ ]?[A-Za-z]{2,})?)?\b|Nigeria|NIGERIA|Nigerian|NGA|尼日利亚|尼日|拉各斯|Lagos|阿布贾|Abuja|LOS|ABV)'
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+  - name: "🇺🇦 乌克兰手选"
+    type: select
+    filter: '(?i)(🇺🇦|\bUA(?:[-_ ]?\d+(?:[-_ ]?[A-Za-z]{2,})?)?\b|🇺🇦|UKR|Ukraine|乌克兰|基辅|Kyiv|Kiev)'
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+  - name: "🇵🇰 巴基斯坦手选"
+    type: select
+    filter: '(?i)(🇵🇰|\bPK(?:[-_ ]?\d+(?:[-_ ]?[A-Za-z]{2,})?)?\b|Pakistan|PAKISTAN|Pakistani|PAK|巴基斯坦|巴基|伊斯兰堡|Islamabad|卡拉奇|Karachi|拉合尔|Lahore|ISB|KHI|LHE)'
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+  - name: "♻️ 香港自动"
+    type: url-test
+    filter: '(?i)(🇭🇰|港|\bHK(?:[-_ ]?\d+(?:[-_ ]?[A-Za-z]{2,})?)?\b|hk|Hong Kong|HongKong|hongkong|HONG KONG|HONGKONG|深港|HKG|九龙|Kowloon|新界|沙田|荃湾|葵涌)'
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+  - name: "♻️ 日本自动"
+    type: url-test
+    filter: '(?i)(🇯🇵|\bJP(?:[-_ ]?\d+(?:[-_ ]?[A-Za-z]{2,})?)?\b|jp|Japan|日本|Nihon|Nippon|JPN|东京|Tokyo|大阪|Osaka|京都|Kyoto|名古屋|Nagoya|横滨|Yokohama|福冈|Fukuoka|札幌|Sapporo|神户|Kobe|冲绳|Okinawa)'
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+  - name: "♻️ 美国自动"
+    type: url-test
+    filter: '(?i)(🇺🇸|美|\bUS(?:[-_ ]?\d+(?:[-_ ]?[A-Za-z]{2,})?)?\b|us|USA|United States|UnitedStates|America|American|美国|米国|纽约|New York|洛杉矶|Los Angeles|旧金山|San Francisco|西雅图|Seattle|芝加哥|Chicago|拉斯维加斯|Las Vegas|华盛顿|Washington|迈阿密|Miami|波士顿|Boston)'
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+  - name: "♻️ 台湾自动"
+    type: url-test
+    filter: '(?i)(🇹🇼|台|\bTW(?:[-_ ]?\d+(?:[-_ ]?[A-Za-z]{2,})?)?\b|tw|TWN|Taiwan|Taiwanese|台湾|臺灣|台灣|台北|Taipei|高雄|Kaohsiung|台中|Taichung|新北|New Taipei|桃园|Taoyuan|新竹|Hsinchu)'
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+  - name: "♻️ 狮城自动"
+    type: url-test
+    filter: '(?i)(🇸🇬|新|\bSG(?:[-_ ]?\d+(?:[-_ ]?[A-Za-z]{2,})?)?\b|sg|SGP|Singapore|Singaporean|新加坡|狮城|獅城|星加坡|滨海|Marina Bay|裕廊|Jurong|乌节|Orchard|淡滨尼|Tampines|榜鹅|Punggol)'
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+  - name: "♻️ 韩国自动"
+    type: url-test
+    filter: '(?i)(🇰🇷|\bKR(?:[-_ ]?\d+(?:[-_ ]?[A-Za-z]{2,})?)?\b|Korea|KOREA|KOR|首尔|韩|韓|春川|Chuncheon|ICN)'
+    use:
+      - 守候
+      - 魔戒
+      - 牛逼
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+  - name: "🎯 全球直连"
+    type: select
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    proxies:
+      - DIRECT
+
+
+
+
+# ==================== 分流规则 Rules ====================
+# 规则自上而下匹配，命中首条规则后停止。
+# no-resolve 用于 IP 类规则，避免为规则匹配额外触发 DNS 解析。
+rules:
+  - "GEOSITE,private,🎯 全球直连"
+  - "GEOIP,private,🎯 全球直连,no-resolve"
+  - "RULE-SET,Custom_Direct_Domain,🎯 全球直连"
+  - "RULE-SET,Custom_Direct_IP,🎯 全球直连,no-resolve"
+  - "RULE-SET,Custom_Direct_Port,🎯 全球直连"
+  - "RULE-SET,Custom_Proxy_Domain,🚀 手动选择"
+  - "RULE-SET,Custom_Proxy_IP,🚀 手动选择,no-resolve"
+  - "GEOSITE,google-cn,🎯 全球直连"
+  - "GEOSITE,category-games@cn,🎯 全球直连"
+  - "RULE-SET,Steam_CDN_Domain,🎯 全球直连"
+  - "RULE-SET,Steam_CDN_IP,🎯 全球直连,no-resolve"
+  - "GEOSITE,category-game-platforms-download,🎯 全球直连"
+  - "GEOSITE,category-public-tracker,🎯 全球直连"
+  - RULE-SET,LocationDKS,🎵 抖快书定位
+  - RULE-SET,snowymoon,🎮 雪月插件
+  - RULE-SET,SRP_Asia_Server,🎮 亚服SRP
+  - "GEOSITE,telegram,📲 电报消息"
+  - "GEOSITE,twitter,🕊️ 推特"
+  - "GEOSITE,category-communication,💬 即时通讯"
+  - "GEOSITE,openai,⚛️ ChatGPT"
+  - "GEOSITE,bing,💬 Ai平台"
+  - "GEOSITE,category-ai-!cn,💬 Ai平台"
+  - "GEOSITE,onedrive,💾 OneDrive"
+  - "GEOSITE,github,🐈‍⬛ Github"
+  - "GEOSITE,steam,🎮 Steam"
+#  - "GEOSITE,xbox,❎ Xbox"
+  - "GEOSITE,youtube,📹 YouTube"
+  - "GEOSITE,apple,🍎 苹果服务"
+  - "GEOSITE,microsoft,Ⓜ️ 微软服务"
+  - "GEOSITE,google,☁️ Google服务"
+  - "GEOSITE,tiktok,🎵 TikTok"
+  - "GEOSITE,epicgames,🎮 Epic"
+  - "GEOSITE,spotify,🎻 Spotify"
+  - "GEOSITE,bahamut,📺 巴哈姆特"
+  - "GEOSITE,category-games-cn,🎮 国内游戏"
+  - "GEOSITE,category-games-!cn,🎮 国外游戏"
+  - "GEOSITE,category-media,🌎 国外媒体"
+  - "GEOSITE,category-entertainment,🌎 国外媒体"
+  - "GEOIP,google,☁️ Google服务,no-resolve"
+  - "GEOIP,telegram,📲 电报消息,no-resolve"
+  - "GEOIP,twitter,🕊️ 推特,no-resolve"
+
+  - "GEOSITE,geolocation-!cn,🌍 国外域名"
+  - "GEOSITE,cn,🎯 全球直连"
+  - "GEOIP,cn,🎯 全球直连,no-resolve"
+  - "RULE-SET,Nonstandard_Port_Direct,🔀 非标端口"
+  - "MATCH,🐟 漏网之鱼"
+
+
+
+  # ==================== 规则提供者 Rule Providers ====================
+# Domain/IP 规则优先使用 MRS；包含端口等复合规则时使用 Classical YAML。
+# 所有远程规则提供者统一按 28800 秒（8 小时）更新。
+rule-providers:
+  Nonstandard_Port_Direct:
+    behavior: classical
+    interval: 28800
+    type: http
+    url: "https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/rule/Custom_Port_Direct.yaml"
+    format: yaml
+  Custom_Direct_Domain:
+    behavior: domain
+    interval: 1800
+    type: http
+    url: "https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/rule/Custom_Direct_Domain.mrs"
+    format: mrs
+  Custom_Direct_IP:
+    behavior: ipcidr
+    interval: 28800
+    type: http
+    url: "https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/rule/Custom_Direct_IP.mrs"
+    format: mrs
+  Custom_Direct_Port:
+    behavior: classical
+    interval: 28800
+    type: http
+    url: "https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/rule/Custom_Direct_Classical_Port.yaml"
+    format: yaml
+  Custom_Proxy_Domain:
+    behavior: domain
+    interval: 28800
+    type: http
+    url: "https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/rule/Custom_Proxy_Domain.mrs"
+    format: mrs
+  Custom_Proxy_IP:
+    behavior: ipcidr
+    interval: 28800
+    type: http
+    url: "https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/rule/Custom_Proxy_IP.mrs"
+    format: mrs
+  Steam_CDN_Domain:
+    behavior: domain
+    interval: 28800
+    type: http
+    url: "https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/rule/Steam_CDN_Domain.mrs"
+    format: mrs
+  Steam_CDN_IP:
+    behavior: ipcidr
+    interval: 28800
+    type: http
+    url: "https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/rule/Steam_CDN_IP.mrs"
+    format: mrs
+  snowymoon:
+    behavior: classical
+    interval: 28800
+    type: http
+    url: "https://raw.githubusercontent.com/sweet346/clstest/refs/heads/main/Snowmoon.list"
+    format: text
+  LocationDKS:
+    behavior: domain
+    interval: 28800
+    type: http
+    url: "https://github.com/666OS/rules/raw/release/mihomo/domain/LocationDKS.mrs"
+    format: mrs
+  SRP_Asia_Server:
+    behavior: ipcidr
+    interval: 28800
+    type: http
+    url: "https://raw.githubusercontent.com/sweet346/clstest/refs/heads/main/SRP_Asia_Server.list"
+    format: text
